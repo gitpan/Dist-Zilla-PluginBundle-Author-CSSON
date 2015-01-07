@@ -4,7 +4,7 @@ use warnings;
 
 package Dist::Zilla::PluginBundle::Author::CSSON;
 
-our $VERSION = '0.1100'; # VERSION
+our $VERSION = '0.1101'; # VERSION
 
 use Moose;
 use MooseX::AttributeShortcuts;
@@ -184,7 +184,7 @@ Dist::Zilla::PluginBundle::Author::CSSON - Dist::Zilla like Csson
 
 =head1 VERSION
 
-version 0.1100
+version 0.1101
 
 =head1 SYNOPSIS
 
