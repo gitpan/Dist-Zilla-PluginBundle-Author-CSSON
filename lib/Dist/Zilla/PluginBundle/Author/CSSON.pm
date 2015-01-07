@@ -4,7 +4,7 @@ use warnings;
 
 package Dist::Zilla::PluginBundle::Author::CSSON;
 
-our $VERSION = '0.1101'; # VERSION
+our $VERSION = '0.1102'; # VERSION
 
 use Moose;
 use MooseX::AttributeShortcuts;
@@ -130,14 +130,15 @@ sub configure {
         [ $self->installer ],
         ['MetaJSON'],
         ['ContributorsFromGit'],
-
-        ['Test::NoTabs'],
-        ['Test::EOL'],
-        ['Test::EOF'],
-        ['PodSyntaxTests'],
         (
             $ENV{'ILLER_AUTHOR_TEST'} ?
-            ['Test::Kwalitee::Extra']
+            (
+            ['Test::Kwalitee::Extra'],
+            ['Test::NoTabs'],
+            ['Test::EOL'],
+            ['Test::EOF'],
+            ['PodSyntaxTests'],
+            )
             :
             ()
         ),
@@ -184,7 +185,7 @@ Dist::Zilla::PluginBundle::Author::CSSON - Dist::Zilla like Csson
 
 =head1 VERSION
 
-version 0.1101
+version 0.1102
 
 =head1 SYNOPSIS
 
