@@ -4,11 +4,11 @@ use warnings;
 
 package Dist::Zilla::PluginBundle::Author::CSSON;
 
-our $VERSION = '0.1000'; # VERSION
+our $VERSION = '0.1100'; # VERSION
 
 use Moose;
 use MooseX::AttributeShortcuts;
-use Types::Standard qw/Str Bool/;
+use Types::Standard qw/Str Int/;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 with 'Dist::Zilla::Role::PluginBundle::PluginRemover';
 with 'Dist::Zilla::Role::PluginBundle::Config::Slicer';
@@ -25,25 +25,35 @@ has installer => (
 );
 has is_private => (
     is => 'rw',
-    isa => Bool,
-    required => 1,
-    default => 0,
+    isa => Int,
+    lazy => 1,
+    default => sub { shift->payload->{'is_private'} || 0 },
 );
 has is_task => (
     is => 'rw',
-    isa => Bool,
-    default => 0,
+    isa => Int,
+    lazy => 1,
+    default => sub { shift->payload->{'is_task'} || 0 },
 );
 has weaver_config => (
     is => 'rw',
     isa => Str,
-    default => '@Iller',
+    lazy => 1,
+    default => sub { shift->payload->{'weaver_config'} || '@Author::CSSON' },
 );
 has homepage => (
     is => 'rw',
     isa => Str,
+    lazy => 1,
     builder => 1,
 );
+has has_travis => (
+    is => 'rw',
+    isa => Int,
+    lazy => 1,
+    default => sub { shift->payload->{'has_travis'} || 0 },
+);
+
 
 sub _build_homepage {
     my $distname = Config::INI::Reader->read_file('dist.ini')->{'_'}{'name'};
@@ -78,7 +88,6 @@ sub configure {
                                    $self->build_file,
                                ] },
         ],
-        ['PodnameFromFilename'],
         ['ReversionOnRelease', { prompt => 1 } ],
         ['OurPkgVersion'],
         ['NextRelease', { format => '%v  %{yyyy-MM-dd HH:mm:ss VVV}d' } ],
@@ -126,8 +135,12 @@ sub configure {
         ['Test::EOL'],
         ['Test::EOF'],
         ['PodSyntaxTests'],
-        ['Test::Kwalitee::Extra'],
-
+        (
+            $ENV{'ILLER_AUTHOR_TEST'} ?
+            ['Test::Kwalitee::Extra']
+            :
+            ()
+        ),
         ['MetaYAML'],
         ['License'],
         ['ExtraTests'],
@@ -140,6 +153,13 @@ sub configure {
         ['TestRelease'],
         ['ConfirmRelease'],
         [ $ENV{'FAKE_RELEASE'} ? 'FakeRelease' : $self->is_private ? 'UploadToStratopan' : 'UploadToCPAN' ],
+        (
+            $self->has_travis ?
+
+            ['TravisYML']
+            :
+            ()
+        ),
         ['Git::Tag', { tag_format => '%v',
                        tag_message => ''
                      }
@@ -164,7 +184,7 @@ Dist::Zilla::PluginBundle::Author::CSSON - Dist::Zilla like Csson
 
 =head1 VERSION
 
-version 0.1000
+version 0.1100
 
 =head1 SYNOPSIS
 

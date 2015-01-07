@@ -1,6 +1,6 @@
 package Dist::Zilla::MintingProfile::Author::CSSON;
 
-our $VERSION = '0.1000'; # VERSION
+our $VERSION = '0.1100'; # VERSION
 
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
@@ -19,7 +19,7 @@ Dist::Zilla::MintingProfile::Author::CSSON
 
 =head1 VERSION
 
-version 0.1000
+version 0.1100
 
 =head1 AUTHOR
 

@@ -73,4 +73,4 @@ requires:
   Types::Standard: '0'
   namespace::autoclean: '0'
   perl: '5.010001'
-version: '0.1000'
+version: '0.1100'
